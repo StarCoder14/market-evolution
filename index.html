@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>진화 시장</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="present">
+
+<header id="top">
+  <div class="brand">진화 시장 <span class="muted">AI 하나에서 갈라져 나온 종들</span></div>
+  <div class="read">
+    <div><label>턴</label><b id="r-turn" class="num">0</b></div>
+    <div><label>AI</label><b id="r-pop" class="num">1</b></div>
+    <div><label>살아 있는 종</label><b id="r-sp" class="num">1</b></div>
+    <div><label>생겨난 종</label><b id="r-sp-all" class="num">1</b></div>
+  </div>
+  <div class="ctl">
+    <button id="play" class="primary" type="button">▶ 재생</button>
+    <button id="step" type="button" title="한 턴 (S)">+1턴</button>
+    <select id="speed" title="배속 (초당 턴)" aria-label="배속">
+      <option value="5">초당 5턴</option>
+      <option value="20" selected>초당 20턴</option>
+      <option value="60">초당 60턴</option>
+      <option value="200">초당 200턴</option>
+    </select>
+    <input id="seed" type="text" size="7" value="2" title="시드" aria-label="시드">
+    <button id="reset" type="button" title="이 시드로 처음부터 (R)">처음부터</button>
+  </div>
+</header>
+
+<main id="grid">
+  <section class="panel" id="p-map">
+    <h2>지도 <span class="muted">점 하나 = AI 하나 · 색 = 종 · 진할수록 체력이 높다 · 지역을 누르면 그 시장을 본다</span></h2>
+    <canvas id="c-map"></canvas>
+  </section>
+
+  <section class="panel" id="p-tree">
+    <h2>계통수 <span class="muted">한 AI 에서 뻗어 나온 종 · 굵기 = 개체 수 · 누르면 그 종만 본다</span></h2>
+    <canvas id="c-tree"></canvas>
+  </section>
+
+  <section class="panel" id="p-radar">
+    <h2>종별 성향 <span class="muted">면 = 물려받은 성향 · 선 = 지금 성향(경험·모방 포함) · 축 합 상한 <span id="budget"></span></span></h2>
+    <div id="radars"></div>
+  </section>
+
+  <section class="panel" id="p-market">
+    <h2><span id="m-title">평원 시장</span> <span class="muted">가격(실선) · 환경이 정한 기본 가치(점선) · 노랑 = 거품</span></h2>
+    <canvas id="c-prices"></canvas>
+  </section>
+
+  <section class="panel" id="p-q">
+    <h2>질문 — 진화는 꼭 유리해서 일어나는가?</h2>
+    <div id="qboard"></div>
+  </section>
+
+  <section class="panel" id="p-feed">
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="story" class="on" type="button">서사</button>
+      <button role="tab" data-tab="deaths" type="button">사망 보고서</button>
+      <button role="tab" data-tab="trades" type="button">판단 기록</button>
+      <label class="muted" id="dec-wrap" title="끄면 모든 폐기를 보여 준다" hidden><input type="checkbox" id="only-dec" checked> 결정적 실수만</label>
+      <span class="muted" id="feed-filter"></span>
+    </div>
+    <div id="feed" class="feed"></div>
+  </section>
+</main>
+
+<footer id="bottom">
+  <span class="muted">Ctrl+클릭 = 차트 크게 보기 · Space 재생 · S 한 턴 · R 처음부터 · 주소 끝에 #t800 을 붙이면 800턴을 미리 돌린 상태로 연다</span>
+  <span class="grow"></span>
+  <button id="csv-turns" type="button">턴별 기록 CSV</button>
+  <button id="csv-deaths" type="button">사망 보고서 CSV</button>
+</footer>
+
+<div id="trace" hidden>
+  <div class="trace-box" role="dialog" aria-modal="true" aria-labelledby="trace-title">
+    <div class="trace-head"><h3 id="trace-title"></h3><button id="trace-close" type="button">닫기</button></div>
+    <div id="trace-body"></div>
+  </div>
+</div>
+
+<!-- 차트 확대 보기 — 차트를 Ctrl+클릭하면 열리고, 재생 중에도 계속 그려진다 -->
+<div id="zoom" hidden>
+  <div class="zoom-box" role="dialog" aria-modal="true" aria-labelledby="zoom-title">
+    <div class="trace-head"><h3 id="zoom-title"></h3><button id="zoom-close" type="button">닫기</button></div>
+    <canvas id="c-zoom"></canvas>
+    <div id="zoom-html" hidden></div>
+  </div>
+</div>
+
+<script src="src/00-rng.js"></script>
+<script src="src/01-config.js"></script>
+<script src="src/02-env.js"></script>
+<script src="src/03-market.js"></script>
+<script src="src/04-agent.js"></script>
+<script src="src/05-world.js"></script>
+<script src="src/06-analysis.js"></script>
+<script src="src/07-charts.js"></script>
+<script src="src/08-ui.js"></script>
+</body>
+</html>
